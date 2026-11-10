@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 // Import your image (Make sure to save it in src/assets as shoubail.jpg)
-import myPhoto from "../../assets/shoubail.jpg";
+import myPhoto from "../../assets/Shoubail.jpg";
 
 gsap.registerPlugin(ScrollTrigger);
 

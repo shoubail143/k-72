@@ -8,3 +8,22 @@ font-face {
   font-family: "font2";
   src: url("../public//fonts/Lausanne-500.woff2");
 }
+
+/* ---------------------------------------------------
+   GLOBAL SCROLLBAR REMOVAL
+   --------------------------------------------------- */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html,
+body {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  /* Optional: Ensures the background matches your theme globally */
+  background-color: #f7f5ee;
+}

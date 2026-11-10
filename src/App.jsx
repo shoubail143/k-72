@@ -9,6 +9,7 @@ import Projects from "./components/Projects/Project.jsx";
 import Settings from "./components/Navbar/Settings.jsx";
 import Agence from "./components/Agence/Agence.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
+import ContactUs from "./components/Home/Contactus.jsx";
 
 gsap.registerPlugin(useGSAP);
 
@@ -73,6 +74,7 @@ const App = () => {
           <Route path="/projects" element={<Projects />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/agence" element={<Agence />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </div>
     </div>

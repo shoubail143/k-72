@@ -1,199 +1,218 @@
-import React, { useRef, useEffect } from "react";
-import gsap from "gsap";
+import React, { useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
-const Homemain = () => {
-  const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
+// --- DATA ---
+const clients = [
+  {
+    id: 1,
+    title: "Laatulakki",
+    type: "Commercial",
+    img: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: 2,
+    title: "Modern Bath",
+    type: "Residential",
+    img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop",
+  },
+  {
+    id: 3,
+    title: "Solace Haven",
+    type: "Interior",
+    img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
+  },
+];
 
-  // High-quality, reliable 4K Unsplash images matching the categories
-  const clients = [
-    {
-      name: "Badeloft",
-      category: "Luxury Sinks & Bathtubs",
-      img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2000&auto=format&fit=crop",
-    },
-    {
-      name: "By Royale",
-      category: "Mid-Century Clocks & Lamps",
-      img: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?q=80&w=2000&auto=format&fit=crop",
-    },
-    {
-      name: "ErgoHide",
-      category: "Ergonomic Desks",
-      img: "https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?q=80&w=2000&auto=format&fit=crop",
-    },
-    {
-      name: "Laatulakki",
-      category: "Graduation Caps",
-      img: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000&auto=format&fit=crop",
-    },
-  ];
+export default function HomeMain() {
+  const [activeIndex, setActiveIndex] = useState(1);
 
-  // 3D Magnetic Tilt & Parallax (Desktop Only)
-  useEffect(() => {
-    if (window.matchMedia("(pointer: coarse)").matches) return;
+  // --- BACKGROUND PARALLAX ---
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
 
-    const cards = cardsRef.current;
+  const handleMouseMove = (e) => {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    mouseX.set(x);
+    mouseY.set(y);
+  };
 
-    const handleMouseMove = (e) => {
-      const card = e.currentTarget;
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      // Subtle 5 degree tilt
-      const rotateX = ((y - centerY) / centerY) * -5;
-      const rotateY = ((x - centerX) / centerX) * 5;
-
-      gsap.to(card, {
-        rotationX: rotateX,
-        rotationY: rotateY,
-        transformPerspective: 1000,
-        ease: "power2.out",
-        duration: 0.5,
-      });
-
-      // Parallax the inner image
-      const img = card.querySelector(".client-img");
-      gsap.to(img, {
-        x: (centerX - x) * 0.05,
-        y: (centerY - y) * 0.05,
-        scale: 1.05, // slight zoom on hover
-        duration: 0.5,
-      });
-    };
-
-    const handleMouseLeave = (e) => {
-      const card = e.currentTarget;
-      const img = card.querySelector(".client-img");
-
-      gsap.to(card, {
-        rotationX: 0,
-        rotationY: 0,
-        duration: 0.8,
-        ease: "power3.out",
-      });
-      gsap.to(img, { x: 0, y: 0, scale: 1, duration: 0.8, ease: "power3.out" });
-    };
-
-    cards.forEach((card) => {
-      if (!card) return;
-      card.addEventListener("mousemove", handleMouseMove);
-      card.addEventListener("mouseleave", handleMouseLeave);
-    });
-
-    return () => {
-      cards.forEach((card) => {
-        if (!card) return;
-        card.removeEventListener("mousemove", handleMouseMove);
-        card.removeEventListener("mouseleave", handleMouseLeave);
-      });
-    };
-  }, []);
+  const bgX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-50, 50]), {
+    stiffness: 100,
+    damping: 30,
+  });
+  const bgY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-50, 50]), {
+    stiffness: 100,
+    damping: 30,
+  });
+  const bgXReverse = useSpring(useTransform(mouseX, [-0.5, 0.5], [50, -50]), {
+    stiffness: 100,
+    damping: 30,
+  });
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative w-full bg-[#050505] py-24 md:py-32 overflow-hidden"
+    // BACKGROUND: Soft Cream (#F9F5F0)
+    <div
+      className="min-h-screen bg-[#F9F5F0] text-[#3A1F24] overflow-hidden relative font-sans selection:bg-[#7A202F]/20"
+      onMouseMove={handleMouseMove}
     >
-      {/* --- ANIMATED BACKGROUND ELEMENTS --- */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Subtle Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]"></div>
+      {/* --- BACKGROUND SHAPES (Burgundy & Gold Parallax) --- */}
+      <motion.div
+        style={{ x: bgX, y: bgY }}
+        animate={{
+          scale: [1, 1.1, 1],
+          rotate: [0, 90, 0],
+        }}
+        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-gradient-to-br from-[#7A202F]/15 to-[#A42E41]/10 rounded-full blur-[100px] pointer-events-none"
+      />
+      <motion.div
+        style={{ x: bgXReverse, y: bgY }}
+        animate={{
+          scale: [1, 1.2, 1],
+          rotate: [0, -90, 0],
+        }}
+        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-gradient-to-tl from-[#D4AF37]/10 to-[#7A202F]/10 rounded-full blur-[100px] pointer-events-none"
+      />
 
-        {/* Glowing Ambient Orbs */}
-        <div className="absolute top-[20%] left-[10%] w-[40vw] h-[40vw] bg-blue-900/20 rounded-full mix-blend-screen filter blur-[150px] animate-[float_10s_ease-in-out_infinite]"></div>
-        <div className="absolute bottom-[20%] right-[10%] w-[40vw] h-[40vw] bg-purple-900/20 rounded-full mix-blend-screen filter blur-[150px] animate-[float_12s_ease-in-out_infinite_reverse]"></div>
-      </div>
-
-      {/* --- CUSTOM CSS FOR INFINITE MARQUEE --- */}
-      <style>
-        {`
-          @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-30px); }
-          }
-          .marquee-track {
-            display: flex;
-            width: max-content;
-            animation: scroll-left 40s linear infinite;
-          }
-          /* Pause on hover */
-          .marquee-container:hover .marquee-track {
-            animation-play-state: paused;
-          }
-        `}
-      </style>
-
-      {/* Header */}
-      <div className="relative z-10 max-w-[90rem] mx-auto px-6 md:px-12 lg:px-24 mb-16 md:mb-24">
-        <div className="flex flex-col items-center text-center">
-          <span className="text-xs md:text-sm font-bold tracking-[0.3em] uppercase text-gray-500 mb-4">
-            Portfolio
+      {/* --- HEADER --- */}
+      {/* Adjusted top padding since Navbar is removed */}
+      <div className="relative z-40 text-center pt-24 pb-12 px-4 max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Badge: Soft burgundy tint */}
+          <span className="inline-block py-1.5 px-4 rounded-full bg-[#7A202F]/10 text-[#7A202F] text-xs font-bold tracking-widest uppercase mb-6 border border-[#7A202F]/20">
+            Portfolio Showcase
           </span>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tighter text-white">
-            Featured{" "}
-            <span className="font-serif italic font-light text-gray-500">
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl tracking-tight flex items-center justify-center gap-3 md:gap-6 flex-wrap">
+            {/* Typography: Muted Burgundy for italic, Deep Espresso for bold */}
+            <span className="font-serif italic text-[#8E6B73] font-light">
+              Our
+            </span>
+            <span className="font-black text-[#3A1F24]">Featured</span>
+            <span className="font-serif italic text-[#8E6B73] font-light">
               Clients
             </span>
-          </h2>
+          </h1>
+        </motion.div>
+      </div>
+
+      {/* --- 3D FANNING GALLERY --- */}
+      <div className="relative z-40 flex items-center justify-center h-[550px] md:h-[650px] mt-10 perspective-[1500px]">
+        <div className="flex items-center justify-center w-full max-w-[1200px]">
+          {clients.map((client, index) => {
+            const isActive = index === activeIndex;
+            const isLeft = index < activeIndex;
+            const isRight = index > activeIndex;
+
+            // 3D Positioning Logic (Unchanged)
+            let xOffset = 0;
+            let rotateY = 0;
+            let scale = 1;
+            let zIndex = 10;
+            let opacity = 1;
+
+            if (isActive) {
+              xOffset = 0;
+              rotateY = 0;
+              scale = 1.05;
+              zIndex = 30;
+            } else if (isLeft) {
+              xOffset = -250;
+              rotateY = 25;
+              scale = 0.85;
+              zIndex = 20 - index;
+              opacity = 0.7;
+            } else if (isRight) {
+              xOffset = 250;
+              rotateY = -25;
+              scale = 0.85;
+              zIndex = 20 - index;
+              opacity = 0.7;
+            }
+
+            return (
+              <motion.div
+                key={client.id}
+                onHoverStart={() => setActiveIndex(index)}
+                animate={{ x: xOffset, rotateY, scale, zIndex, opacity }}
+                transition={{ type: "spring", stiffness: 200, damping: 25 }}
+                className="absolute w-[300px] md:w-[400px] h-[450px] md:h-[550px] cursor-pointer rounded-[2.5rem] overflow-hidden shadow-[0_20px_50px_-12px_rgba(58,31,36,0.3)] border border-white/40 bg-white"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <motion.img
+                  src={client.img}
+                  alt={client.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  animate={{ scale: isActive ? 1.05 : 1 }}
+                  transition={{ duration: 0.7 }}
+                />
+
+                {/* Overlay: Using a rich burgundy/plum gradient instead of harsh black */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-t ${isActive ? "from-[#2A0B10]/95 via-[#2A0B10]/30" : "from-[#2A0B10]/80 via-[#2A0B10]/50"} to-transparent opacity-90 transition-opacity duration-500`}
+                />
+
+                {/* Card Content */}
+                <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col justify-end text-[#F9F5F0]">
+                  <motion.div
+                    animate={{
+                      y: isActive ? 0 : 20,
+                      opacity: isActive ? 1 : 0.6,
+                    }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {/* Accent Text: Muted Gold/Burgundy */}
+                    <span className="text-xs font-bold tracking-widest uppercase text-[#D4AF37] mb-2 block">
+                      {client.type}
+                    </span>
+                    <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                      {client.title}
+                    </h3>
+
+                    <div
+                      className={`flex items-center gap-3 transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
+                    >
+                      {/* Button: Burgundy background, cream text */}
+                      <div className="w-10 h-10 rounded-full bg-[#7A202F] text-[#F9F5F0] flex items-center justify-center hover:bg-[#5E1914] hover:scale-110 transition-all shadow-lg">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M14 5l7 7m0 0l-7 7m7-7H3"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-sm font-medium tracking-wide text-[#F9F5F0]/90">
+                        Explore Project
+                      </span>
+                    </div>
+                  </motion.div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
 
-      {/* --- INFINITE MARQUEE CONTAINER --- */}
-      <div className="relative z-10 marquee-container w-full overflow-hidden">
-        {/* Gradient Fades for smooth entry/exit (Now blending into the dark background) */}
-        <div className="absolute top-0 left-0 w-24 md:w-64 h-full bg-gradient-to-r from-[#050505] to-transparent z-20 pointer-events-none"></div>
-        <div className="absolute top-0 right-0 w-24 md:w-64 h-full bg-gradient-to-l from-[#050505] to-transparent z-20 pointer-events-none"></div>
-
-        {/* The Moving Track */}
-        <div className="marquee-track gap-6 md:gap-8 px-4 py-8">
-          {[...clients, ...clients].map((client, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                if (index < 4) cardsRef.current[index] = el;
-              }}
-              // Card sizing: taller, slightly wider, full dark glass background
-              className="group relative w-[75vw] sm:w-[45vw] md:w-[350px] lg:w-[420px] aspect-[3/4] bg-[#111] rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl cursor-pointer flex-shrink-0"
-              style={{ transformStyle: "preserve-3d" }}
-            >
-              {/* Full-Card Image */}
-              <img
-                src={client.img}
-                alt={client.name}
-                // object-cover makes the image fill the whole card. scale up for hover effect.
-                className="client-img absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out"
-              />
-
-              {/* Subtle Dark Overlay for Readability (Only at the bottom) */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent opacity-90 transition-opacity duration-500 z-10"></div>
-
-              {/* Text Content */}
-              <div className="absolute bottom-0 left-0 w-full p-8 z-20 transform transition-transform duration-500 group-hover:-translate-y-2">
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-1">
-                  {client.name}
-                </h3>
-                <p className="text-gray-400 text-sm md:text-base font-medium">
-                  {client.category}
-                </p>
-              </div>
-
-              {/* Thin Border Glow on Hover */}
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-white/20 rounded-[2rem] transition-colors duration-500 z-30 pointer-events-none"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+      {/* --- BOTTOM HINT --- */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="absolute bottom-8 left-0 w-full flex justify-center z-50 pointer-events-none"
+      ></motion.div>
+    </div>
   );
-};
-
-export default Homemain;
+}
