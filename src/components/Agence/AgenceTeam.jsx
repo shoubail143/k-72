@@ -1,13 +1,13 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-const [isTapped, setIsTapped] = useState(false);
 
 const AgenceTeam = () => {
   const sectionRef = useRef(null);
+  const [isTapped, setIsTapped] = useState(false);
 
   const team = [
     {
