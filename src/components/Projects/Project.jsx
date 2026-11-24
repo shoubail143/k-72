@@ -1,4 +1,3 @@
-import React from "react";
 import Projecthero from "./Projecthero.jsx";
 import Projectmain from "./Projectmain.jsx";
 import Projectfooter from "./Projectfooter.jsx";

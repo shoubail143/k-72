@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 // Import your pages
 import Home from "./components/Home/Home.jsx";
 import Projects from "./components/Projects/Project.jsx";
-import Settings from "./components/Navbar/Settings.jsx";
+import Cv from "./components/Navbar/Cv.jsx";
 import Agence from "./components/Agence/Agence.jsx";
 import Navbar from "./components/Navbar/Navbar.jsx";
 import ContactUs from "./components/Home/Contactus.jsx";
@@ -72,7 +72,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/cv" element={<Cv />} />
           <Route path="/agence" element={<Agence />} />
           <Route path="/contact" element={<ContactUs />} />
         </Routes>

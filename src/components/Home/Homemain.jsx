@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const clients = [
@@ -54,40 +54,21 @@ const clients = [
 
 export default function HomeMain() {
   const [activeIndex, setActiveIndex] = useState(3);
-  const wheelTimeout = useRef(null);
-
   const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
 
   const handleMouseMove = (e) => {
     const x = e.clientX / window.innerWidth - 0.5;
-    const y = e.clientY / window.innerHeight - 0.5;
     mouseX.set(x);
-    mouseY.set(y);
   };
 
   const bgX = useSpring(useTransform(mouseX, [-0.5, 0.5], [-20, 20]), {
     stiffness: 60,
     damping: 20,
   });
-  const bgY = useSpring(useTransform(mouseY, [-0.5, 0.5], [-20, 20]), {
-    stiffness: 60,
-    damping: 20,
-  });
-
   const handleNext = () =>
     setActiveIndex((prev) => (prev + 1) % clients.length);
   const handlePrev = () =>
     setActiveIndex((prev) => (prev - 1 + clients.length) % clients.length);
-
-  const handleWheel = (e) => {
-    if (wheelTimeout.current) return;
-    if (e.deltaY > 0) handleNext();
-    if (e.deltaY < 0) handlePrev();
-    wheelTimeout.current = setTimeout(() => {
-      wheelTimeout.current = null;
-    }, 150);
-  };
 
   const smoothTransition = {
     type: "tween",
@@ -102,13 +83,13 @@ export default function HomeMain() {
     >
       {/* BACKGROUND SHAPES */}
       <motion.div
-        style={{ x: bgX, y: bgY }}
+        style={{ x: bgX }}
         animate={{ scale: [1, 1.05, 1] }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
         className="absolute top-0 left-[-10%] w-[600px] h-[600px] bg-gradient-to-br from-[#7A202F]/10 to-[#A42E41]/5 rounded-full blur-[80px] pointer-events-none will-change-transform"
       />
       <motion.div
-        style={{ x: bgX, y: bgY }}
+        style={{ x: bgX }}
         animate={{ scale: [1, 1.05, 1] }}
         transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
         className="absolute bottom-[-10%] right-[-10%] w-[700px] h-[700px] bg-gradient-to-tl from-[#D4AF37]/10 to-[#7A202F]/5 rounded-full blur-[80px] pointer-events-none will-change-transform"
@@ -139,7 +120,7 @@ export default function HomeMain() {
       {/* --- CURVED 3D SCROLL GALLERY --- */}
       <div
         className="relative z-40 w-full h-[500px] md:h-[600px] flex items-center justify-center perspective-[1500px] cursor-grab active:cursor-grabbing mt-0"
-        onWheel={handleWheel}
+        //onWheel={handleWheel}
       >
         <motion.div
           className="relative flex items-center justify-center w-full max-w-[1400px] h-full"
@@ -251,9 +232,8 @@ export default function HomeMain() {
               transition={{ duration: 0.8, ease: "easeInOut" }}
               className="absolute inset-0 w-1/2 bg-gradient-to-r from-transparent via-white/80 to-transparent skew-x-[-20deg] pointer-events-none"
             />
-
-            <span className="text-sm font-bold tracking-[0.15em] uppercase text-[#8E6B73] relative z-10">
-              Scroll, Drag or
+            <span className="text-xs md:text-sm font-[#7A202F]-bold font-[font2] tracking-[0.15em] uppercase text-[#7A202F]">
+              Drag or
             </span>
 
             {/* The Highlighted Next Button inside */}
@@ -263,7 +243,7 @@ export default function HomeMain() {
               variants={{
                 hover: { scale: 1.05, backgroundColor: "#5E1914" },
               }}
-              className="relative z-10 flex items-center gap-2 bg-[#7A202F] text-[#F9F5F0] px-5 py-2 rounded-full shadow-lg shadow-[#7A202F]/30 transition-colors duration-300 cursor-pointer" // ADDED cursor-pointer HERE
+              className="relative flex items-center justify-center gap-2 md:gap-3 bg-[#7A202F] text-[#F9F5F0] px-5 py-2.5 md:px-6 md:py-3 min-h-[44px] rounded-full shadow-lg shadow-[#7A202F]/30 transition-colors duration-300 cursor-pointer whitespace-nowrap"
             >
               <span className="text-xs font-black tracking-widest uppercase mt-[1px]">
                 Next
@@ -291,7 +271,7 @@ export default function HomeMain() {
               </motion.svg>
             </motion.div>
 
-            <span className="text-sm font-bold tracking-[0.15em] uppercase text-[#8E6B73] relative z-10">
+            <span className="text-sm font-[font2]-bold tracking-[0.15em] uppercase text-[#7A202F] relative z-10">
               to explore
             </span>
           </motion.div>

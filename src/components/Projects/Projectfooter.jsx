@@ -1,225 +1,192 @@
 import React, { useRef } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+// --- MAGNETIC BUTTON COMPONENT ---
+const MagneticButton = () => {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-const Projectfooter = () => {
-  const footerRef = useRef(null);
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
-  useGSAP(
-    () => {
-      // 1. Reveal Animations for Footer Columns
-      gsap.from(".footer-col", {
-        scrollTrigger: {
-          trigger: footerRef.current,
-          start: "top 85%", // Start animation when footer is 85% down the screen
-        },
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-      });
+  const handleMouseMove = (e) => {
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+    const rect = ref.current.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+    x.set(xPct * 30);
+    y.set(yPct * 30);
+  };
 
-      // 2. Reveal Animation for the Massive CTA Text
-      gsap.from(".cta-text", {
-        scrollTrigger: {
-          trigger: ".cta-text",
-          start: "top 90%",
-        },
-        y: 100,
-        opacity: 0,
-        duration: 1.2,
-        ease: "power4.out",
-      });
-    },
-    { scope: footerRef },
-  );
-
-  // Smooth scroll back to top
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
   };
 
   return (
-    <footer
-      ref={footerRef}
-      className="relative w-full bg-[#050505] text-white pt-24 pb-8 overflow-hidden border-t border-white/10"
+    <motion.div
+      style={{ x: mouseXSpring, y: mouseYSpring }}
+      className="relative z-20 w-full sm:w-auto"
     >
-      {/* --- CUSTOM CSS FOR MARQUEE --- */}
-      <style>
-        {`
-          @keyframes marquee {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-          }
-        `}
-      </style>
+      <a
+        ref={ref}
+        href="/contact"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="group relative flex items-center justify-center gap-3 w-full sm:w-auto px-6 md:px-8 py-4 md:py-5 bg-white text-black rounded-full overflow-hidden transition-all duration-300 ease-out active:scale-95 hover:shadow-[0_0_40px_rgba(251,191,36,0.3)]"
+      >
+        <span className="text-xs sm:text-sm md:text-base font-bold tracking-tight whitespace-nowrap z-10 transition-colors duration-300 group-hover:text-black">
+          shoubaillakhtar143@gmail.com
+        </span>
+        <span className="relative z-10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+          <ArrowUpRight size={18} strokeWidth={2.5} className="md:w-5 md:h-5" />
+        </span>
 
-      {/* Ambient Background Glows */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80vw] h-[30vw] bg-blue-900/10 rounded-full mix-blend-screen filter blur-[150px] pointer-events-none"></div>
-      <div className="absolute top-0 right-0 w-[40vw] h-[40vw] bg-orange-900/5 rounded-full mix-blend-screen filter blur-[120px] pointer-events-none"></div>
-
-      <div className="max-w-[90rem] mx-auto px-6 md:px-12 lg:px-24 relative z-10">
-        {/* --- TOP SECTION: GIANT CTA --- */}
-        <div className="flex flex-col items-center justify-center text-center mb-24 md:mb-32">
-          <p className="text-gray-400 tracking-[0.2em] uppercase text-xs md:text-sm mb-6 font-medium">
-            Have a project in mind?
-          </p>
-
-          <a
-            href="mailto:hello@sixtyseventh.com"
-            className="cta-text group relative inline-block text-5xl md:text-8xl lg:text-[10rem] font-black tracking-tighter uppercase cursor-pointer"
-          >
-            Let's Talk
-            {/* Animated Underline on Hover */}
-            <span className="absolute -bottom-2 left-0 w-full h-[4px] bg-white scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 ease-out"></span>
-            {/* Floating Glow behind text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/5 blur-[80px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
-          </a>
-        </div>
-
-        {/* --- MIDDLE SECTION: LINKS GRID --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-24">
-          {/* Column 1: Brand Info */}
-          <div className="footer-col flex flex-col gap-6">
-            <h3 className="text-2xl font-bold tracking-tighter">
-              Sixty-Seventh.
-            </h3>
-            <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
-              A digital design agency crafting immersive experiences, iconic
-              brands, and cutting-edge websites.
-            </p>
-          </div>
-
-          {/* Column 2: Sitemap */}
-          <div className="footer-col flex flex-col gap-4">
-            <h4 className="text-sm font-bold tracking-widest uppercase text-gray-500 mb-2">
-              Sitemap
-            </h4>
-            <a
-              href="/"
-              className="text-gray-300 hover:text-white transition-colors text-base w-max"
-            >
-              Home
-            </a>
-            <a
-              href="/projects"
-              className="text-gray-300 hover:text-white transition-colors text-base w-max"
-            >
-              Projects
-            </a>
-            <a
-              href="/agence"
-              className="text-gray-300 hover:text-white transition-colors text-base w-max"
-            >
-              Agence
-            </a>
-            <a
-              href="/contact"
-              className="text-gray-300 hover:text-white transition-colors text-base w-max"
-            >
-              Contact
-            </a>
-          </div>
-
-          {/* Column 3: Socials */}
-          <div className="footer-col flex flex-col gap-4">
-            <h4 className="text-sm font-bold tracking-widest uppercase text-gray-500 mb-2">
-              Socials
-            </h4>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-blue-400 transition-colors text-base w-max flex items-center gap-2"
-            >
-              Instagram <span className="text-xs">↗</span>
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-blue-400 transition-colors text-base w-max flex items-center gap-2"
-            >
-              Dribbble <span className="text-xs">↗</span>
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-blue-400 transition-colors text-base w-max flex items-center gap-2"
-            >
-              LinkedIn <span className="text-xs">↗</span>
-            </a>
-            <a
-              href="#"
-              className="text-gray-300 hover:text-blue-400 transition-colors text-base w-max flex items-center gap-2"
-            >
-              Twitter <span className="text-xs">↗</span>
-            </a>
-          </div>
-
-          {/* Column 4: Contact */}
-          <div className="footer-col flex flex-col gap-4">
-            <h4 className="text-sm font-bold tracking-widest uppercase text-gray-500 mb-2">
-              Get in touch
-            </h4>
-            <a
-              href="mailto:hello@sixtyseventh.com"
-              className="text-gray-300 hover:text-white transition-colors text-base"
-            >
-              shoubailakhtar143@gmail.com
-            </a>
-            <p className="text-gray-400 text-sm mt-2">
-              123 Design Street
-              <br />
-              Creative District, PK 26
-            </p>
-          </div>
-        </div>
-
-        {/* --- BOTTOM SECTION: INFINITE MARQUEE --- */}
-        <div className="w-full overflow-hidden border-y border-white/10 py-6 mb-8 relative">
-          {/* Gradient Fades for smooth edges */}
-          <div className="absolute inset-y-0 left-0 w-24 md:w-48 bg-gradient-to-r from-[#050505] to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-24 md:w-48 bg-gradient-to-l from-[#050505] to-transparent z-10 pointer-events-none"></div>
-
-          <div className="flex w-max animate-[marquee_20s_linear_infinite]">
-            {[...Array(2)].map((_, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-8 px-4 text-4xl md:text-6xl font-black uppercase text-white/10 tracking-tighter"
-              >
-                <span>Let's create</span>
-                <span className="text-blue-500/20 text-2xl md:text-4xl">✦</span>
-                <span>Let's build</span>
-                <span className="text-orange-500/20 text-2xl md:text-4xl">
-                  ✦
-                </span>
-                <span>Let's inspire</span>
-                <span className="text-blue-500/20 text-2xl md:text-4xl">✦</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* --- FINAL BAR: COPYRIGHT & BACK TO TOP --- */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>
-            © {new Date().getFullYear()} Sixty-Seventh Agency. All rights
-            reserved.
-          </p>
-
-          <button
-            onClick={scrollToTop}
-            className="group flex items-center gap-2 hover:text-white transition-colors cursor-pointer"
-          >
-            Back to top
-            <span className="w-8 h-8 rounded-full border border-gray-600 flex items-center justify-center group-hover:border-white group-hover:-translate-y-1 transition-all duration-300">
-              ↑
-            </span>
-          </button>
-        </div>
-      </div>
-    </footer>
+        {/* Hover Fill */}
+        <div className="absolute inset-0 bg-amber-400 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"></div>
+      </a>
+    </motion.div>
   );
 };
 
-export default Projectfooter;
+// --- MAIN FOOTER COMPONENT ---
+export default function Projectfooter() {
+  const slideUp = {
+    hidden: { y: "100%", opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.8, ease: [0.19, 1, 0.22, 1] },
+    },
+  };
+
+  return (
+    /* 
+      CHANGED: Added 'flex flex-col justify-between' and 'min-h-screen'
+      This pushes the copyright to the absolute bottom and prevents overlap.
+    */
+    <footer className="relative w-full bg-[#050505] pt-24 pb-6 overflow-hidden flex flex-col justify-between min-h-screen">
+      {/* =========================================
+          SUPERCHARGED BACKGROUND ANIMATIONS
+      ========================================= */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Giant Amber Orb floating around */}
+        <motion.div
+          animate={{
+            x: [0, 100, -50, 0],
+            y: [0, -50, 50, 0],
+            scale: [1, 1.2, 0.9, 1],
+            opacity: [0.15, 0.25, 0.15, 0.15],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-10 left-10 w-[60vw] md:w-[40vw] h-[60vw] md:h-[40vw] bg-amber-500 rounded-full blur-[120px]"
+        />
+
+        {/* Smaller Orange Orb floating opposite */}
+        <motion.div
+          animate={{
+            x: [0, -80, 60, 0],
+            y: [0, 80, -40, 0],
+            scale: [1, 1.3, 0.8, 1],
+            opacity: [0.1, 0.2, 0.1, 0.1],
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2,
+          }}
+          className="absolute bottom-10 right-10 w-[50vw] md:w-[30vw] h-[50vw] md:h-[30vw] bg-orange-600 rounded-full blur-[100px]"
+        />
+
+        {/* Fading Grid Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+      </div>
+
+      {/* =========================================
+          MAIN CONTENT (Centered)
+      ========================================= */}
+      <div className="relative z-10 w-full px-4 md:px-8 flex flex-col items-center justify-center text-center my-auto pt-10">
+        <div className="flex flex-col items-center justify-center mb-8 md:mb-12 w-full">
+          {/* Line 1: LET'S */}
+          <div className="overflow-hidden pb-1 md:pb-2 w-full flex justify-center pr-4 md:pr-8">
+            <motion.h2
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={slideUp}
+              className="text-[18vw] sm:text-8xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.8] text-white whitespace-nowrap"
+            >
+              LET'S
+            </motion.h2>
+          </div>
+
+          {/* Line 2: TALK! (Outline) */}
+          <div className="overflow-hidden pb-2 md:pb-4 w-full flex justify-center pr-4 md:pr-8">
+            <motion.h2
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              variants={slideUp}
+              transition={{
+                delay: 0.15,
+                duration: 0.8,
+                ease: [0.19, 1, 0.22, 1],
+              }}
+              className="text-[18vw] sm:text-8xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.8] italic text-transparent [-webkit-text-stroke:1.5px_#f59e0b] md:[-webkit-text-stroke:3px_#f59e0b] whitespace-nowrap"
+            >
+              TALK!
+            </motion.h2>
+          </div>
+        </div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="max-w-xl text-neutral-400 text-sm md:text-lg leading-relaxed mb-10 md:mb-14 px-2"
+        >
+          Have a project in mind? We're ready to bring your vision to life. Drop
+          us a line and let's build something extraordinary together.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.5 }}
+          className="w-full max-w-md flex justify-center"
+        >
+          <MagneticButton />
+        </motion.div>
+      </div>
+
+      {/* =========================================
+          BOTTOM COPYRIGHT (Now in normal flow, pushed to bottom)
+      ========================================= */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.8, duration: 1 }}
+        className="relative z-10 w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-12 pt-12 pb-4 text-neutral-500 text-[10px] md:text-xs font-mono uppercase tracking-widest gap-4 md:gap-0"
+      >
+        <p>© {new Date().getFullYear()} Ahence Agency.</p>
+        <div className="flex gap-6">
+          <a href="#" className="hover:text-amber-400 transition-colors">
+            Twitter
+          </a>
+          <a href="#" className="hover:text-amber-400 transition-colors">
+            LinkedIn
+          </a>
+          <a href="#" className="hover:text-amber-400 transition-colors">
+            Instagram
+          </a>
+        </div>
+      </motion.div>
+    </footer>
+  );
+}

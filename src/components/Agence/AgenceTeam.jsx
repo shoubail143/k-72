@@ -1,33 +1,34 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
+const [isTapped, setIsTapped] = useState(false);
 
 const AgenceTeam = () => {
   const sectionRef = useRef(null);
 
   const team = [
     {
-      name: "Elias Vance",
-      role: "Creative Director",
-      img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2564&auto=format&fit=crop",
+      name: "Shoubail",
+      role: "Web Designer & Fullstack",
+      image: "./Shoubaill.webp",
     },
     {
-      name: "Sarah Jenkins",
-      role: "Lead Designer",
-      img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2564&auto=format&fit=crop",
+      name: "Abdullah",
+      role: "Full Stack Web-Developer",
+      image: "/Abdullah.webp",
     },
     {
-      name: "Marcus Chen",
-      role: "Head of Development",
-      img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2564&auto=format&fit=crop",
+      name: "Sabeel",
+      role: "Flat is boring.Let’s add a third dimension.",
+      image: "/Sabeel.webp",
     },
     {
-      name: "Chloe Laurent",
-      role: "Art Director",
-      img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2564&auto=format&fit=crop",
+      name: "Haris",
+      role: "Code is poetry; the browser is my canvas.",
+      image: "/Haris.webp",
     },
   ];
 
@@ -119,12 +120,21 @@ const AgenceTeam = () => {
                 index % 2 !== 0 ? "lg:mt-16" : ""
               }`}
             >
-              {/* Image */}
-              <img
-                src={member.img}
-                alt={member.name}
-                className="absolute inset-0 w-full h-full object-cover grayscale-[40%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              />
+              {/* Clickable Image Wrapper for Mobile & Desktop */}
+              <div
+                className="absolute inset-0 w-full h-full cursor-pointer group overflow-hidden"
+                onClick={() => setIsTapped(!isTapped)}
+              >
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  loading="lazy" // Optimization: Only loads when scrolled into view
+                  decoding="async" // Optimization: Prevents browser freezing
+                  className={`w-full h-full object-cover transition-all duration-700 ease-out
+      ${isTapped ? "grayscale-0 scale-105" : "grayscale-[40%]"}
+      group-hover:grayscale-0 group-hover:scale-105`}
+                />
+              </div>
 
               {/* Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
@@ -176,7 +186,7 @@ const AgenceTeam = () => {
               key={i}
               className="flex items-center gap-8 px-4 text-4xl md:text-6xl font-black uppercase text-white/80 tracking-tighter"
             >
-              <span>Sixty-Seventh</span>
+              <span>Nine-Teen</span>
               <span className="text-white/20 text-2xl">✦</span>
               <span>Independent Agency</span>
               <span className="text-white/20 text-2xl">✦</span>

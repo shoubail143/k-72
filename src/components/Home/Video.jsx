@@ -1,4 +1,3 @@
-import React from "react";
 import backro from "../../assets/backro.mp4";
 
 const Video = () => {

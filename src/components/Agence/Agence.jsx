@@ -1,4 +1,3 @@
-import React from "react";
 import Agencehero from "./Agencehero.jsx";
 import Manifesto from "./Manifesto.jsx";
 import Afterfesto from "./Afterfesto.jsx";

@@ -1,0 +1,244 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Syne:wght@700;800&display=swap");
+
+.creative-footer {
+  position: relative;
+  background-color: #0a0a0a; /* Deep black/grey */
+  color: #ffffff;
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8vw 5vw 2vw 5vw;
+  overflow: hidden; /* Keeps background shapes contained */
+  font-family: "Inter", sans-serif;
+}
+
+/* =========================================
+   BACKGROUND SHAPES (Figma Vibe)
+   ========================================= */
+.background-shapes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-element {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.05); /* Very faint */
+  font-size: 4rem;
+  font-weight: 800;
+  will-change: transform;
+}
+
+.shape-circle {
+  width: 300px;
+  height: 300px;
+  border: 2px solid rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  top: 10%;
+  left: -5%;
+  font-size: initial;
+}
+
+.shape-cross {
+  top: 20%;
+  right: 10%;
+  font-size: 6rem;
+  color: rgba(255, 255, 255, 0.03);
+}
+.shape-figma {
+  bottom: 30%;
+  left: 20%;
+  font-size: 5rem;
+  color: rgba(255, 255, 255, 0.04);
+}
+.shape-pen {
+  top: 15%;
+  left: 40%;
+  font-size: 3rem;
+}
+.shape-star {
+  bottom: 20%;
+  right: 15%;
+  font-size: 4rem;
+  color: rgba(212, 163, 115, 0.1);
+}
+.shape-code {
+  top: 50%;
+  right: 30%;
+  font-size: 3rem;
+}
+
+/* =========================================
+   MAIN CONTENT
+   ========================================= */
+.footer-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: 5vh;
+}
+
+.hero-header {
+  margin-bottom: 2rem;
+}
+
+.text-wrapper {
+  overflow: hidden; /* Creates the masking reveal effect for GSAP */
+  padding-bottom: 10px; /* Prevents cutting off descenders */
+}
+
+.hero-header h1 {
+  font-family: "Syne", sans-serif;
+  font-size: clamp(5rem, 15vw, 14rem); /* HUGE Responsive text */
+  font-weight: 800;
+  line-height: 0.85;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  margin: 0;
+  will-change: transform;
+}
+
+.text-accent {
+  color: transparent;
+  -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8); /* Outline text effect */
+}
+
+.footer-subtext {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: #888;
+  max-width: 600px;
+  line-height: 1.6;
+  margin-bottom: 4rem;
+  font-weight: 300;
+}
+
+/* =========================================
+   MAGNETIC BUTTON
+   ========================================= */
+.magnetic-wrapper {
+  padding: 3rem; /* Space for the button to move around */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.magnetic-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 1.5rem 3.5rem;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+  border-radius: 60px;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  will-change: transform; /* For GSAP magnetic effect */
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.magnetic-btn:hover {
+  background-color: transparent;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-arrow {
+  font-size: 1.3rem;
+  transition: transform 0.3s ease;
+}
+
+.magnetic-btn:hover .btn-arrow {
+  transform: translate(5px, -5px);
+}
+
+/* =========================================
+   BOTTOM BAR
+   ========================================= */
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+  font-size: 0.75rem;
+  color: #666;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.social-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.social-link {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.social-link::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: -4px;
+  left: 0;
+  background-color: #fff;
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.social-link:hover {
+  color: #fff;
+}
+
+.social-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
+@media (max-width: 768px) {
+  .creative-footer {
+    padding: 15vw 5vw 5vw 5vw;
+    min-height: 100vh;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .social-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+  }
+
+  .magnetic-btn {
+    padding: 1.2rem 2.5rem;
+    font-size: 0.9rem;
+  }
+}

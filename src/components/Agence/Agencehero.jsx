@@ -1,5 +1,3 @@
-import React from "react";
-
 const AgenceHero = () => {
   return (
     <>
@@ -64,13 +62,13 @@ const AgenceHero = () => {
         {/* --- THE TEXT CONTENT --- */}
         <div className="relative z-10 flex flex-col items-center gap-6 md:gap-8 text-center mt-[-5vh]">
           <h1 className="text-6xl md:text-8xl lg:text-[9rem] font-extralight tracking-tighter text-white animate-[fade-up_1.5s_ease-out_forwards] drop-shadow-2xl">
-            Sixty-seventh
+            Nine-Teen
           </h1>
 
           <div className="flex items-center gap-4 animate-[fade-up_1.5s_ease-out_0.3s_forwards] opacity-0">
             <div className="h-[1px] w-12 bg-orange-200/50 hidden md:block"></div>
             <h2 className="text-2xl md:text-4xl font-light tracking-[0.2em] text-orange-50 uppercase animate-[subtle-drift_6s_ease-in-out_infinite]">
-              Twelve
+              QUATTRO!
             </h2>
             <div className="h-[1px] w-12 bg-orange-200/50 hidden md:block"></div>
           </div>
@@ -79,7 +77,7 @@ const AgenceHero = () => {
         {/* --- SUBTITLE --- */}
         <div className="absolute bottom-12 left-0 w-full text-center z-10 animate-[fade-up_1.5s_ease-out_0.6s_forwards] opacity-0">
           <p className="text-xs md:text-sm tracking-[0.3em] text-orange-200/60 uppercase">
-            Independent Creative Agency
+            The Quattro Creative Agency
           </p>
         </div>
       </section>
